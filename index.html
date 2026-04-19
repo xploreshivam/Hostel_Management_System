@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- 
+     PROJECT: NexStay Hostel Management System
+     SUBMITTED BY: [Your Name]
+     ROLL NUMBER: [Your Roll No]
+     SEMESTER: 4
+-->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexStay: Smart Hostel Management Project</title>
+    <meta name="description" content="A Semester 4 project for managing hostel rooms, students, and warden activities.">
+    <link rel="stylesheet" href="./css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* =============================================
+           LANDING PAGE — SIMPLE & CLEAN
+           ============================================= */
+        body { background: var(--bg-main); }
+
+        /* ---- NAVBAR ---- */
+        .lp-nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 18px 7%;
+            background: rgba(255, 252, 249, 0.95);
+            border-bottom: 1px solid var(--border-light);
+            transition: all 0.3s ease;
+        }
+        [data-theme="dark"] .lp-nav { background: rgba(15, 5, 7, 0.95); }
+        
+        .lp-nav .logo-text {
+            font-size: 1.3rem; font-weight: 700; color: var(--text-main); text-decoration: none;
+        }
+        .lp-nav__links {
+            display: flex; align-items: center; gap: 30px;
+        }
+        .lp-nav__links a {
+            font-size: 0.9rem; font-weight: 500; color: var(--text-muted); text-decoration: none;
+        }
+        .lp-nav__links a:hover { color: var(--primary); }
+        .lp-nav .nav-cta {
+            padding: 10px 22px; border-radius: 8px; font-size: 0.85rem;
+            font-weight: 600; cursor: pointer; border: none;
+            background: var(--primary); color: #fff;
+        }
+
+        /* ---- HERO ---- */
+        .lp-hero {
+            min-height: 80vh;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            text-align: center;
+            padding: 100px 7%;
+        }
+        .lp-hero h1 {
+            font-size: 3.5rem; font-weight: 800; color: var(--text-main); margin-bottom: 20px;
+        }
+        .lp-hero h1 span { color: var(--primary); }
+        .lp-hero p {
+            font-size: 1.1rem; color: var(--text-muted); max-width: 600px; margin: 0 auto 40px;
+        }
+        .btn-hero-primary {
+            padding: 16px 40px; font-size: 1rem; font-weight: 600;
+            border-radius: 8px; border: none; cursor: pointer;
+            background: var(--primary); color: #fff;
+        }
+        .btn-hero-ghost {
+            padding: 16px 40px; font-size: 1rem; font-weight: 500;
+            border-radius: 8px; border: 1.5px solid var(--border); cursor: pointer;
+            background: transparent; color: var(--text-muted);
+        }
+
+        /* ---- SECTIONS ---- */
+        .lp-section { padding: 80px 7%; }
+        .lp-section--alt { background: var(--bg-section); }
+        .section-heading {
+            font-size: 2.2rem; font-weight: 700; color: var(--text-main); margin-bottom: 40px;
+        }
+
+        .features-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        .feature-card {
+            background: var(--white); border: 1px solid var(--border-light);
+            border-radius: 12px; padding: 30px;
+        }
+        .feature-card i { font-size: 1.5rem; color: var(--primary); margin-bottom: 20px; }
+        .feature-card h3 { font-size: 1.2rem; margin-bottom: 10px; }
+        .feature-card p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; }
+
+        /* ---- CTA & FOOTER ---- */
+        .lp-cta {
+            padding: 80px 7%; text-align: center; background: var(--primary); color: #fff;
+        }
+        .lp-cta h2 { font-size: 2.5rem; margin-bottom: 20px; }
+        .lp-cta p { margin-bottom: 30px; opacity: 0.8; }
+        .btn-cta-white {
+            padding: 15px 40px; font-size: 1rem; font-weight: 700;
+            border-radius: 8px; border: none; background: #fff; color: var(--primary);
+        }
+
+        .lp-footer {
+            background: #111; color: #888; padding: 60px 7% 30px;
+        }
+        .lp-footer__top {
+            display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px;
+            padding-bottom: 40px; border-bottom: 1px solid #222;
+        }
+        .lp-footer h5 { color: #fff; margin-bottom: 20px; font-size: 0.9rem; }
+        .lp-footer ul { list-style: none; padding: 0; }
+        .lp-footer ul li { margin-bottom: 10px; }
+        .lp-footer ul a { color: #888; text-decoration: none; font-size: 0.85rem; }
+        .lp-footer__bottom { padding-top: 30px; font-size: 0.8rem; }
+
+        /* Simple Modal Pop */
+        .modal-content { transition: transform 0.3s ease; }
+        .glass-overlay.active .modal-content { transform: scale(1); }
+    </style>
+</head>
+<body>
+
+    <!-- ============================
+         NAVBAR
+    ============================= -->
+    <nav class="lp-nav" id="lpNav">
+        <a href="#" class="logo-text">NexStay.</a>
+        <div class="lp-nav__links">
+            <a href="#features">Features</a>
+            <a href="#about">About</a>
+            <a href="#contact">Contact</a>
+            <button class="dark-toggle" onclick="toggleDarkMode()" title="Toggle theme">
+                <i class="fa-solid fa-moon" id="themeIcon"></i>
+            </button>
+            <button class="nav-cta" onclick="openLogin(); addRipple(event, this)">
+                Login Portal
+            </button>
+        </div>
+    </nav>
+
+    <!-- ============================
+         HERO
+    ============================= -->
+    <section class="lp-hero" id="home">
+        <h1>Hostel Management <span>Made Easy.</span></h1>
+        <p>A simple and efficient way to manage room allocations, student records, and daily operations for college hostels.</p>
+        <div class="lp-hero__actions">
+            <button class="btn-hero-primary" onclick="openLogin()">
+                Get Started &rarr;
+            </button>
+            <button class="btn-hero-ghost" onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})">
+                Learn More
+            </button>
+        </div>
+    </section>
+
+    <!-- ============================
+         QUICK STATS
+    ============================= -->
+    <section class="lp-section--alt" style="padding: 40px 7%; border-top: 1px solid var(--border-light); border-bottom: 1px solid var(--border-light);">
+        <div class="stats-row" style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 20px;">
+            <div style="text-align: center;">
+                <div style="font-size: 2rem; font-weight: 800; color: var(--primary);">250+</div>
+                <div style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;">Students</div>
+            </div>
+            <div style="text-align: center;">
+                <div style="font-size: 2rem; font-weight: 800; color: var(--primary);">120+</div>
+                <div style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;">Rooms</div>
+            </div>
+            <div style="text-align: center;">
+                <div style="font-size: 2rem; font-weight: 800; color: var(--primary);">3</div>
+                <div style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;">Portals</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================
+         FEATURES SECTION
+    ============================= -->
+    <section class="lp-section" id="features">
+        <h2 class="section-heading">Key Features</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <i class="fa-solid fa-bed"></i>
+                <h3>Room Allocation</h3>
+                <p>Track real-time room availability and manage student allotments across different blocks with a simple grid interface.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fa-solid fa-user-shield"></i>
+                <h3>Gate Pass System</h3>
+                <p>Generate secure digital gate passes and track student out/in timings automatically for better campus safety.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fa-solid fa-utensils"></i>
+                <h3>Mess Management</h3>
+                <p>Easily manage and view weekly mess menus with a simple switching interface for students and staff.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================
+         ABOUT SECTION
+    ============================= -->
+    <section class="lp-section lp-section--alt" id="about">
+        <div class="about-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;">
+            <div>
+                <h2 class="section-heading">Built for Students</h2>
+                <p style="color: var(--text-muted); line-height: 1.6; margin-bottom: 20px;">
+                    NexStay was developed to replace old paper registers and scattered excel sheets with a unified digital platform. 
+                    It is designed to be lightweight, easy to use, and accessible from any device.
+                </p>
+                <p style="color: var(--text-muted); line-height: 1.6;">
+                    Whether you are a student checking your room status or a warden managing a block, 
+                    everything you need is just a click away.
+                </p>
+            </div>
+            <div style="background: var(--white); border: 1px solid var(--border-light); border-radius: 12px; padding: 30px;">
+                <h4 style="margin-bottom: 20px; font-weight: 700;">Role-Based Access</h4>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+                        <i class="fa-solid fa-circle-check" style="color: var(--success);"></i>
+                        <span>Student Dashboard</span>
+                    </li>
+                    <li style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+                        <i class="fa-solid fa-circle-check" style="color: var(--success);"></i>
+                        <span>Warden Control Panel</span>
+                    </li>
+                    <li style="margin-bottom: 0; display: flex; align-items: center; gap: 10px;">
+                        <i class="fa-solid fa-circle-check" style="color: var(--success);"></i>
+                        <span>Admin Central Command</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================
+         CONTACT
+    ============================= -->
+    <section class="lp-section" id="contact">
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start;">
+            <div>
+                <p class="section-label reveal">Get In Touch</p>
+                <h2 class="section-heading reveal reveal-delay-1">We'd love to hear<br>from your campus.</h2>
+                <p class="section-sub reveal reveal-delay-2" style="margin-bottom:40px;">Whether you're a college administrator or a student tech lead, reach out to set up NexStay at your institution.</p>
+                <div style="display:flex; flex-direction:column; gap:20px;">
+                    <div class="reveal reveal-delay-1" style="display:flex; gap:16px; align-items:flex-start;">
+                        <div style="width:44px; height:44px; border-radius:12px; background:var(--primary-light); color:var(--primary); display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:1rem;">
+                            <i class="fa-solid fa-location-dot"></i>
+                        </div>
+                        <div>
+                            <h4 style="font-size:0.95rem; font-weight:700; margin-bottom:4px;">Headquarters</h4>
+                            <p style="font-size:0.85rem; color:var(--text-muted);">Academic Block A, Tech University Campus, Bhopal, MP 462026</p>
+                        </div>
+                    </div>
+                    <div class="reveal reveal-delay-2" style="display:flex; gap:16px; align-items:flex-start;">
+                        <div style="width:44px; height:44px; border-radius:12px; background:var(--primary-light); color:var(--primary); display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:1rem;">
+                            <i class="fa-solid fa-headset"></i>
+                        </div>
+                        <div>
+                            <h4 style="font-size:0.95rem; font-weight:700; margin-bottom:4px;">24/7 Support</h4>
+                            <p style="font-size:0.85rem; color:var(--text-muted);">+91 1800-NEXSTAY · support@nexstay.edu</p>
+                        </div>
+                    </div>
+                    <div class="reveal reveal-delay-3" style="display:flex; gap:16px; align-items:flex-start;">
+                        <div style="width:44px; height:44px; border-radius:12px; background:var(--primary-light); color:var(--primary); display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:1rem;">
+                            <i class="fa-solid fa-envelope"></i>
+                        </div>
+                        <div>
+                            <h4 style="font-size:0.95rem; font-weight:700; margin-bottom:4px;">Partnership</h4>
+                            <p style="font-size:0.85rem; color:var(--text-muted);">partner@nexstay.edu</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="reveal reveal-delay-2" style="background:var(--bg-section); border:1px solid var(--border-light); border-radius:var(--radius-xl); padding:44px;">
+                <h3 style="font-size:1.2rem; font-weight:700; margin-bottom:6px;">Quick Enquiry</h3>
+                <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:28px;">We typically respond within one business day.</p>
+                <div style="display:flex; flex-direction:column; gap:16px;">
+                    <div class="input-group">
+                        <label>Your Name</label>
+                        <input type="text" placeholder="Dr. Rajesh Kumar" id="contactName" style="padding-left:14px;">
+                    </div>
+                    <div class="input-group">
+                        <label>Institution Email</label>
+                        <i class="fa-regular fa-envelope"></i>
+                        <input type="email" placeholder="director@university.edu" id="contactEmail">
+                    </div>
+                    <div class="input-group" style="margin-bottom:4px;">
+                        <label>Message</label>
+                        <textarea placeholder="Tell us about your campus and hostel requirements..." id="contactMsg" rows="4" style="width:100%; padding:14px; border:1px solid var(--border); border-radius:12px; background:var(--white); color:var(--text-main); font-family:inherit; font-size:0.9rem; resize:vertical; outline:none; transition: border-color 0.2s;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border)'"></textarea>
+                    </div>
+                    <button class="btn-hero-primary w-100" style="border-radius:12px; width:100%;" onclick="submitEnquiry(this)">
+                        Send Enquiry <i class="fa-solid fa-paper-plane" style="margin-left:8px; font-size:0.85rem;"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ============================
+         FOOTER
+    ============================= -->
+    <footer class="lp-footer">
+        <div class="lp-footer__top">
+            <div>
+                <div class="logo-text" style="color:#fff; margin-bottom:15px;">NexStay.</div>
+                <p style="font-size:0.85rem; line-height:1.6;">Simple & Efficient Hostel Management System for Students, Wardens, and Admins.</p>
+            </div>
+            <div class="f-col">
+                <h5>Navigation</h5>
+                <ul>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#">Contact Support</a></li>
+                </ul>
+            </div>
+            <div class="f-col">
+                <h5>Portals</h5>
+                <ul>
+                    <li><a href="dashboard.html">Student Portal</a></li>
+                    <li><a href="warden.html">Warden Portal</a></li>
+                    <li><a href="admin.html">Admin Portal</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="lp-footer__bottom">
+            <p>&copy; 2026 NexStay Project. Submitted for Semester 4 Evaluation.</p>
+        </div>
+    </footer>
+
+    <div id="toast-container"></div>
+
+    <!-- ============================
+         LOGIN MODAL
+    ============================= -->
+    <div class="glass-overlay modal" id="loginModal">
+        <div class="modal-content" style="border-radius:12px; box-shadow:0 20px 50px rgba(0,0,0,0.1);">
+            <button class="close-btn" onclick="closeLogin()"><i class="fa-solid fa-xmark"></i></button>
+            <h2 style="font-weight:700; margin-bottom:10px;">Login Portal</h2>
+            <p>Select your portal and continue.</p>
+            <form onsubmit="return false;" class="login-form">
+                <div class="input-group">
+                    <div class="role-selector">
+                        <label class="radio-card"><input type="radio" name="role" value="student" checked><span class="card-content">Student</span></label>
+                        <label class="radio-card"><input type="radio" name="role" value="warden"><span class="card-content">Warden</span></label>
+                        <label class="radio-card"><input type="radio" name="role" value="admin"><span class="card-content">Admin</span></label>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Email ID</label>
+                    <input type="email" placeholder="you@nexstay.edu" style="padding-left:15px;">
+                </div>
+                <div class="input-group">
+                    <label>Password</label>
+                    <input type="password" placeholder="••••••••" style="padding-left:15px;">
+                </div>
+                <button type="button" class="btn-primary w-100" style="padding:15px; font-weight:700; margin-top:20px;" onclick="handleLogin()">
+                    Sign In &rarr;
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script src="./js/script.js"></script>
+    <script>
+    // ---- Theme Toggle Sync ----
+    function updateThemeIcon() {
+        const isDark = document.body.getAttribute('data-theme') === 'dark';
+        const icon = document.getElementById('themeIcon');
+        if (icon) {
+            icon.className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+        }
+    }
+    updateThemeIcon();
+
+    // Wrap global toggle from script.js to update icon
+    const _baseToggle = window.toggleDarkMode;
+    window.toggleDarkMode = function() {
+        if (typeof _baseToggle === 'function') {
+            _baseToggle();
+            updateThemeIcon();
+        }
+    };
+
+    // Smooth scroll for anchors
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    });
+    </script>
+</body>
+</html>
